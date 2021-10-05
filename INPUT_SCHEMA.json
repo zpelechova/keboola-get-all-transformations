@@ -1,0 +1,15 @@
+{
+    "title": "Input schema for the Keboola API actor.",
+    "type": "object",
+    "schemaVersion": 1,
+    "properties": {
+        "shopName": {
+            "title": "Shop name",
+            "type": "array",
+            "description": "With country suffix.",
+            "editor": "stringList",
+            "prefill": ["Alza_cz"]
+        }
+    },
+    "required": ["shopName"]
+}
