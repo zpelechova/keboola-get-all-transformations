@@ -54,8 +54,9 @@ Apify.main(async () => {
                     transformationName: transformations[t].name,
                     transformationDescription: transformations[t].description,
                     transformationIsDisabled: transformations[t].isDisabled,
-                    transformationQueries:
-                        transformations[t].configuration.queries
+                    transformationInputs: allInput,
+                    transformationOutput: allOutput,
+                    transformationQueries: transformations[t].configuration.queries,
                 }
                 allTranformations.push(transData)
             }
