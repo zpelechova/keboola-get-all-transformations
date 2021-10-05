@@ -25,44 +25,48 @@ Apify.main(async () => {
     const allBuckets = []
 
     for (const i of info) {
-        const transformations = i.rows
-        const allTranformations = []
-        for (const t in transformations) {
-            const output = transformations[t].configuration.output
-            const allOutput = []
-            for (const o in output) {
-                const outputData = {
-                    destination: output[o].destination,
-                    source: output[o].source,
-                    incremental: output[o].incremental
+        const bucketName = i.name
+        if (bucketName.startsWith('#0')) {
+            const transformations = i.rows
+            const allTranformations = []
+            for (const t in transformations) {
+                const output = transformations[t].configuration.output
+                const allOutput = []
+                for (const o in output) {
+                    const outputData = {
+                        destination: output[o].destination,
+                        source: output[o].source,
+                        incremental: output[o].incremental
+                    }
+                    allOutput.push(outputData)
                 }
-                allOutput.push(outputData)
-            }
-            const input = transformations[t].configuration.input
-            const allInput = []
-            for (const i in input) {
-                const inputData = {
-                    source: input[i].source,
-                    destination: input[i].destination
+                const input = transformations[t].configuration.input
+                const allInput = []
+                for (const i in input) {
+                    const inputData = {
+                        source: input[i].source,
+                        destination: input[i].destination
+                    }
+                    allInput.push(inputData)
                 }
-                allInput.push(inputData)
+                const transData = {
+                    transformationId: transformations[t].id,
+                    transformationName: transformations[t].name,
+                    transformationDescription: transformations[t].description,
+                    transformationIsDisabled: transformations[t].isDisabled,
+                    transformationQueries:
+                        transformations[t].configuration.queries
+                }
+                allTranformations.push(transData)
             }
-            const transData = {
-                transformationId: transformations[t].id,
-                transformationName: transformations[t].name,
-                transformationDescription: transformations[t].description,
-                transformationIsDisabled: transformations[t].isDisabled,
-                transformationQueries: transformations[t].configuration.queries
+            const data = {
+                bucketName,
+                bucketId: i.id,
+                bucketDescription: i.description,
+                transformations: allTranformations
             }
-            allTranformations.push(transData)
+            allBuckets.push(data)
         }
-        const data = {
-            bucketId: i.id,
-            bucketName: i.name,
-            bucketDescription: i.description,
-            transformations: allTranformations
-        }
-        allBuckets.push(data)
     }
 
     await Apify.pushData(allBuckets)
